@@ -268,12 +268,9 @@ function varargout = mtimesx(varargin)
 % If you got here then mtimesx is not compiled yet, so go compile it first.
 %/
 
-mtimesx_build;
+run(fullfile('src', 'mtimesx_build.m'));
+movefile(fullfile('src', 'mtimesx.mex*'));
 
-%\
-% Call the mex routine mtimesx.
-%/
-
-[varargout{1:nargout}] = mtimesx(varargin{:});
+error('mtimesx has not complied yet, try re-run `mtimesx`');
 
 end
