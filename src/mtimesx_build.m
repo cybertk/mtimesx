@@ -94,6 +94,17 @@ if( nargout ~= 0 )
 end
 
 %\
+% Check for Octave
+%/
+%
+disp('... Checking for Octave');
+octave = (exist ('OCTAVE_VERSION', 'builtin') > 0);
+if( octave )
+    mkoctfile('--mex', 'mtimesx.c', '-DOCTAVE', '-lblas');
+    return
+end
+
+%\
 % Check for non-PC
 %/
 
