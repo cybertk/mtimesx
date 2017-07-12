@@ -5,10 +5,12 @@
 % 
 %  Function:    mtimesx_build
 %  Filename:    mtimesx_build.m
-%  Programmer:  James Tursa
-%  Version:     1.40
-%  Date:        October 4, 2010
-%  Copyright:   (c) 2009, 2010 by James Tursa, All Rights Reserved
+%  Programmer:  James Tursa, Quanlong He
+%  Version:     1.50
+%  Date:        July 12, 2017
+%  Copyright:   (c) 2009, 2010 by James Tursa,
+%                   2017 by Quanlong He,
+%               All Rights Reserved
 %
 %  This code uses the BSD License:
 %
@@ -91,6 +93,17 @@ elseif( nargin ~= 0 )
 end
 if( nargout ~= 0 )
     error('Too many outputs. Expected none.');
+end
+
+%\
+% Check for Octave
+%/
+%
+disp('... Checking for Octave');
+octave = (exist ('OCTAVE_VERSION', 'builtin') > 0);
+if( octave )
+    mkoctfile('--mex', 'mtimesx.c', '-DOCTAVE', '-lblas');
+    return
 end
 
 %\

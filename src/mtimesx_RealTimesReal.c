@@ -3,10 +3,12 @@
  * MATLAB (R) is a trademark of The Mathworks (R) Corporation
  *
  * Filename:    mtimesx_RealTimesReal.c
- * Programmer:  James Tursa
- * Version:     1.41
- * Date:        February 23, 2011
- * Copyright:   (c) 2009, 2010, 2011 by James Tursa, All Rights Reserved
+ * Programmer:  James Tursa, Quanlong He
+ * Version:     1.50
+ * Date:        July 12, 2017
+ * Copyright:   (c) 2009, 2010, 2011 by James Tursa,
+ *                  2017 by Quanlong He,
+ *              All Rights Reserved
  *
  *  This code uses the BSD License:
  *
@@ -47,6 +49,7 @@
  *                       Expanded sparse * single and sparse * nD support
  *                       Fixed (nD complex scalar)C * (nD array) bug.
  * 2011/Feb/23 --> 1.41, Fixed typos in _syrk and _syr2k BLAS prototypes.
+ * 2017/Jul/12 --> 1.50, Add Octave support.
  *
  ****************************************************************************/
 
@@ -6914,13 +6917,22 @@ mxArray *RealScalarTimesReal(mxArray *A, char transa, mwSize m1, mwSize n1,
 			if( debug_message ) {
 				mexPrintf("MTIMESX: Shared data copy\n");
 			}
+#ifdef OCTAVE
+            // Octave does not provide fast copy API
+            result = mxDuplicateArray(B);
+#else
             result = mxCreateSharedDataCopy(B);
+#endif
             return result;
         } else if( (Bdims[0] == 1 || Bdims[1] == 1) && (transb == 'T' || (transb == 'C' && Bpi == NULL)) ) {
 						if( debug_message ) {
 				mexPrintf("MTIMESX: Shared data copy\n");
 			}
+#ifdef OCTAVE
+            result = mxDuplicateArray(B);
+#else
             result = mxCreateSharedDataCopy(B);
+#endif
             Cdims = mxMalloc( Bndim * sizeof(*Cdims) );
             for( Cp=2; Cp<Bndim; Cp++) {
                 Cdims[Cp] = Bdims[Cp];
